@@ -1,0 +1,572 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>LEDGERA</title>
+  <link rel="stylesheet" href="../css/styles.css">
+</head>
+<body>
+
+  <!-- Aviso de conexión (RIH-011) -->
+  <div id="banner-conexion" class="banner-conexion" hidden>
+    Sin conexión. No se pueden registrar operaciones hasta que vuelva la señal.
+  </div>
+
+  <!-- PANTALLA 1: INICIO DE SESIÓN (RF-001) -->
+  <section id="pantalla-login" class="pantalla-acceso">
+    <div class="acceso-marca">
+      <h1>LEDGERA</h1>
+      <p>Contabilidad e inventario para tu puesto en Corabastos.</p>
+    </div>
+    <div class="acceso-formulario">
+      <div class="tarjeta tarjeta-acceso">
+        <h2>Iniciar sesión</h2>
+        <p class="texto-suave">Ingresa para abrir tu jornada.</p>
+        <form id="form-login">
+          <label for="login-usuario">Usuario</label>
+          <input id="login-usuario" type="text" autocomplete="username" required>
+          <label for="login-clave">Contraseña</label>
+          <input id="login-clave" type="password" autocomplete="current-password" required>
+          <p id="login-error" class="texto-error"></p>
+          <button type="submit" class="boton boton-primario boton-ancho">Entrar</button>
+          <p class="texto-suave texto-pequeno">Demo: aprendiz / contraseña: LEDGERA</p>
+        </form>
+      </div>
+    </div>
+  </section>
+
+  <!-- PANTALLA 2: APERTURA DE CAJA (RF-020) -->
+  <section id="pantalla-apertura" class="pantalla-acceso" hidden>
+    <div class="acceso-marca">
+      <h1>LEDGERA</h1>
+      <p>Sin jornada abierta no se registran operaciones.</p>
+    </div>
+    <div class="acceso-formulario">
+      <div class="tarjeta tarjeta-acceso">
+        <h2>Abrir caja</h2>
+        <p id="apertura-saludo"></p>
+        <form id="form-apertura">
+          <label for="apertura-base">Base inicial en efectivo (COP)</label>
+          <input id="apertura-base" type="text" inputmode="numeric" required>
+          <p id="apertura-sugerido" class="texto-suave texto-pequeno"></p>
+          <p id="apertura-error" class="texto-error"></p>
+          <button type="submit" class="boton boton-primario boton-ancho">Abrir jornada</button>
+        </form>
+      </div>
+    </div>
+  </section>
+
+  <!-- PANTALLA 3: APLICACIÓN (barra lateral + vistas) -->
+  <section id="pantalla-app" hidden>
+    <div class="layout">
+
+      <aside class="lateral">
+        <div class="lateral-logo">LEDGERA</div>
+        <nav class="lateral-menu">
+          <a class="menu-item activo" data-vista="ventas">Ventas</a>
+          <a class="menu-item" data-vista="compras">Compras</a>
+          <a class="menu-item" data-vista="inventario">Inventario</a>
+          <a class="menu-item" data-vista="clientes">Clientes y fiados </a>
+          <a class="menu-item" data-vista="egresos">Egresos </a>
+          <a class="menu-item" data-vista="caja">Cierre de caja </a>
+        </nav>
+        <div class="lateral-usuario">
+          <span id="barra-base" class="insignia insignia-lateral"></span>
+          <small>Sesión activa</small>
+          <strong id="barra-usuario"></strong>
+          <button id="btn-salir" class="boton boton-fantasma" type="button">Cerrar sesión</button>
+        </div>
+      </aside>
+
+      <div class="contenido">
+
+        <!-- ============ VISTA: VENTAS (RF-010, RF-011) ============ -->
+        <section id="vista-ventas" class="vista">
+          <header class="encabezado">
+            <div>
+              <h1>Registro de ventas</h1>
+              <p class="texto-suave">Selecciona los productos y confirma el pago.</p>
+            </div>
+          </header>
+
+          <div class="zona-trabajo">
+            <div class="columna-principal">
+              <section class="tarjeta">
+                <div class="tarjeta-cabecera">
+                  <h2>Productos</h2>
+                  <input id="buscador" type="search" class="buscador" placeholder="Buscar producto o calidad...">
+                </div>
+                <div id="catalogo" class="catalogo"></div>
+              </section>
+
+              <section class="tarjeta">
+                <h2>Ventas de hoy</h2>
+                <div class="tabla-contenedor">
+                  <table class="tabla">
+                    <thead>
+                      <tr><th>#</th><th>Hora</th><th>Cliente</th><th>Canal</th><th>Pago</th><th class="derecha">Total</th></tr>
+                    </thead>
+                    <tbody id="historial"></tbody>
+                  </table>
+                </div>
+              </section>
+            </div>
+
+            <aside class="ticket tarjeta">
+              <h2>Venta actual</h2>
+              <div id="carrito" class="carrito"></div>
+
+              <h3>Canal</h3>
+              <div class="selector-canal">
+                <button type="button" class="opcion-canal activa" data-canal="Mostrador">Mostrador</button>
+                <button type="button" class="opcion-canal" data-canal="Domicilio">Domicilio</button>
+              </div>
+
+              <h3>Forma de pago</h3>
+              <div id="bloque-pagos">
+                <div class="atajos">
+                  <button type="button" class="atajo" data-todo="efectivo">Todo efectivo</button>
+                  <button type="button" class="atajo" data-todo="digital">Todo digital</button>
+                  <button type="button" class="atajo" data-todo="fiado">Todo fiado</button>
+                </div>
+                <div class="fila-dos">
+                  <div>
+                    <label for="pago-efectivo">Efectivo</label>
+                    <input id="pago-efectivo" type="text" inputmode="numeric" value="0">
+                  </div>
+                  <div>
+                    <label for="pago-digital">Digital</label>
+                    <input id="pago-digital" type="text" inputmode="numeric" value="0">
+                  </div>
+                </div>
+                <div class="fila-dos">
+                  <div>
+                    <label for="pago-medio">Medio digital</label>
+                    <select id="pago-medio">
+                      <option>Nequi</option>
+                      <option>Daviplata</option>
+                      <option>Bre-B</option>
+                    </select>
+                  </div>
+                  <div>
+                    <label for="pago-fiado">Fiado</label>
+                    <input id="pago-fiado" type="text" inputmode="numeric" value="0">
+                  </div>
+                </div>
+                <div id="bloque-cliente" hidden>
+                  <label for="pago-cliente">Cliente (obligatorio si hay fiado)</label>
+                  <select id="pago-cliente"></select>
+                </div>
+              </div>
+
+              <div class="resumen">
+                <span class="resumen-etiqueta">Total a cobrar</span>
+                <span id="resumen-total" class="resumen-total">$0</span>
+                <p id="resumen-vence" class="texto-suave"></p>
+                <div id="resumen-errores"></div>
+              </div>
+
+              <button id="btn-confirmar" type="button" class="boton boton-primario boton-grande boton-ancho" disabled>
+                Confirmar venta
+              </button>
+            </aside>
+          </div>
+        </section>
+
+        <!-- ============ VISTA: COMPRAS Y PROVEEDORES (RF-004, RF-006) ============ -->
+        <section id="vista-compras" class="vista" hidden>
+          <header class="encabezado">
+            <div>
+              <h1>Compras y proveedores</h1>
+              <p class="texto-suave">Registra la mercancía que llega. Cada entrada genera una deuda con el proveedor.</p>
+            </div>
+          </header>
+
+          <div class="rejilla-dos">
+            <div class="pila">
+
+              <section class="tarjeta">
+                <h2>Nueva entrada de mercancía</h2>
+
+                <div class="fila-proveedor">
+                  <div>
+                    <label for="compra-proveedor">Proveedor</label>
+                    <select id="compra-proveedor"></select>
+                  </div>
+                  <button id="btn-nuevo-proveedor" type="button" class="boton boton-secundario">+ Nuevo proveedor</button>
+                </div>
+
+                <form id="form-proveedor" class="subformulario" hidden>
+                  <h3>Nuevo proveedor</h3>
+                  <div class="fila-dos">
+                    <div>
+                      <label for="prov-nombre">Nombre o razón social</label>
+                      <input id="prov-nombre" type="text" required>
+                    </div>
+                    <div>
+                      <label for="prov-telefono">Teléfono (opcional)</label>
+                      <input id="prov-telefono" type="text" inputmode="numeric">
+                    </div>
+                  </div>
+                  <button type="submit" class="boton boton-primario boton-pequeno">Guardar y seleccionar</button>
+                </form>
+
+                <label for="compra-documento">Número de factura o remisión (opcional)</label>
+                <input id="compra-documento" type="text" placeholder="Ej: REM-2026-002">
+
+                <h3>Productos recibidos</h3>
+                <div class="fila-linea">
+                  <div>
+                    <label for="compra-producto">Producto y calidad</label>
+                    <select id="compra-producto"></select>
+                  </div>
+                  <div>
+                    <label for="compra-cantidad">Cantidad</label>
+                    <input id="compra-cantidad" type="text" inputmode="numeric" placeholder="0">
+                  </div>
+                  <div>
+                    <label for="compra-costo">Costo unitario</label>
+                    <input id="compra-costo" type="text" inputmode="numeric" placeholder="0">
+                  </div>
+                  <button id="btn-agregar-linea" type="button" class="boton boton-secundario">Agregar</button>
+                </div>
+
+                <div class="tabla-contenedor">
+                  <table class="tabla">
+                    <thead>
+                      <tr><th>Producto</th><th class="derecha">Cantidad</th><th class="derecha">Costo</th><th class="derecha">Subtotal</th><th></th></tr>
+                    </thead>
+                    <tbody id="compra-lineas"></tbody>
+                  </table>
+                </div>
+
+                <div class="resumen">
+                  <span class="resumen-etiqueta">Total a pagar al proveedor</span>
+                  <span id="compra-total" class="resumen-total">$0</span>
+                </div>
+                <button id="btn-confirmar-entrada" type="button" class="boton boton-primario boton-grande boton-ancho" disabled>
+                  Confirmar entrada
+                </button>
+              </section>
+
+              <section class="tarjeta">
+                <h2>Entradas registradas</h2>
+                <div class="tabla-contenedor">
+                  <table class="tabla">
+                    <thead>
+                      <tr><th>#</th><th>Proveedor</th><th>Documento</th><th class="derecha">Total</th><th class="derecha">Saldo</th><th>Estado</th></tr>
+                    </thead>
+                    <tbody id="tabla-entradas"></tbody>
+                  </table>
+                </div>
+              </section>
+            </div>
+
+            <section class="tarjeta">
+              <h2>Proveedores</h2>
+              <div class="tabla-contenedor">
+                <table class="tabla">
+                  <thead>
+                    <tr><th>Nombre</th><th>Teléfono</th><th class="derecha">Saldo</th><th>Estado</th><th></th></tr>
+                  </thead>
+                  <tbody id="tabla-proveedores"></tbody>
+                </table>
+              </div>
+            </section>
+          </div>
+        </section>
+
+              <!-- ============ VISTA: INVENTARIO (RF-007, RF-008, RF-009) ============ -->
+        <section id="vista-inventario" class="vista" hidden>
+          <header class="encabezado">
+            <div>
+              <h1>Inventario</h1>
+              <p class="texto-suave">Existencias por producto y calidad, precios del día y ajustes.</p>
+            </div>
+          </header>
+
+          <div class="rejilla-dos">
+            <div class="pila">
+              <section class="tarjeta">
+                <h2>Existencias y precios</h2>
+                <div class="tabla-contenedor">
+                  <table class="tabla">
+                    <thead>
+                      <tr><th>Producto</th><th>Calidad</th><th class="derecha">Stock</th><th class="derecha">Mínimo</th><th>Estado</th><th>Precio de venta</th></tr>
+                    </thead>
+                    <tbody id="tabla-inventario"></tbody>
+                  </table>
+                </div>
+              </section>
+
+              <section class="tarjeta">
+                <h2>Movimientos de hoy</h2>
+                <div class="tabla-contenedor">
+                  <table class="tabla">
+                    <thead>
+                      <tr><th>Hora</th><th>Tipo</th><th>Producto</th><th class="derecha">Cantidad</th><th>Usuario</th></tr>
+                    </thead>
+                    <tbody id="tabla-movimientos"></tbody>
+                  </table>
+                </div>
+              </section>
+
+              <section class="tarjeta">
+                <h2>Historial de cambios de precio</h2>
+                <div class="tabla-contenedor">
+                  <table class="tabla">
+                    <thead>
+                      <tr><th>Hora</th><th>Producto</th><th class="derecha">Anterior</th><th class="derecha">Nuevo</th><th>Origen</th><th>Usuario</th></tr>
+                    </thead>
+                    <tbody id="tabla-cambios"></tbody>
+                  </table>
+                </div>
+              </section>
+            </div>
+
+            <div class="pila">
+              <section class="tarjeta">
+                <h2>Ajuste de inventario</h2>
+                <form id="form-ajuste">
+                  <label for="ajuste-item">Producto y calidad</label>
+                  <select id="ajuste-item" required></select>
+
+                  <label for="ajuste-tipo">Tipo de ajuste</label>
+                  <select id="ajuste-tipo">
+                    <option value="Merma">Merma (pérdida o daño)</option>
+                    <option value="Correccion_conteo">Corrección por conteo físico</option>
+                  </select>
+
+                  <label for="ajuste-cantidad" id="ajuste-etiqueta">Unidades perdidas</label>
+                  <input id="ajuste-cantidad" type="text" inputmode="numeric" required>
+
+                  <label for="ajuste-motivo">Motivo (obligatorio)</label>
+                  <input id="ajuste-motivo" type="text" required>
+
+                  <button type="submit" class="boton boton-primario boton-ancho">Registrar ajuste</button>
+                </form>
+              </section>
+
+              <section class="tarjeta">
+                <h2>Nuevo producto o calidad</h2>
+                <form id="form-nuevo-item">
+                  <div class="fila-dos">
+                    <div>
+                      <label for="nuevo-producto">Producto</label>
+                      <input id="nuevo-producto" type="text" required>
+                    </div>
+                    <div>
+                      <label for="nuevo-calidad">Calidad</label>
+                      <input id="nuevo-calidad" type="text" required>
+                    </div>
+                  </div>
+                  <div class="fila-dos">
+                    <div>
+                      <label for="nuevo-minimo">Stock mínimo</label>
+                      <input id="nuevo-minimo" type="text" inputmode="numeric" value="0">
+                    </div>
+                    <div>
+                      <label for="nuevo-precio">Precio de venta</label>
+                      <input id="nuevo-precio" type="text" inputmode="numeric" value="0">
+                    </div>
+                  </div>
+                  <button type="submit" class="boton boton-secundario boton-ancho">Crear</button>
+                </form>
+              </section>
+            </div>
+          </div>
+        </section>
+<!-- ============ VISTA: CLIENTES Y FIADOS (RF-005, RF-012, RF-013) ============ -->
+<section id="vista-clientes" class="vista" hidden>
+  <header class="encabezado"><div>
+    <h1>Clientes y fiados</h1>
+    <p class="texto-suave">Cartera pendiente, alertas de mora y abonos. Cada abono se aplica a una venta específica.</p>
+  </div></header>
+  <div class="rejilla-dos">
+    <div class="pila">
+      <section class="tarjeta">
+        <h2>Cartera pendiente</h2>
+        <div class="fila-dos">
+          <div class="resumen"><span class="resumen-etiqueta">Cartera total</span><span id="cartera-total" class="resumen-total">$0</span></div>
+          <div class="resumen"><span class="resumen-etiqueta">Cartera vencida</span><span id="cartera-vencida" class="resumen-total">$0</span></div>
+        </div>
+        <div class="tabla-contenedor">
+          <table class="tabla">
+            <thead><tr><th>Cliente</th><th>Teléfono</th><th>Vence</th><th>Mora</th><th class="derecha">Saldo</th><th></th></tr></thead>
+            <tbody id="tabla-cartera"></tbody>
+          </table>
+        </div>
+      </section>
+      <section class="tarjeta">
+        <h2>Abonos de hoy</h2>
+        <div class="tabla-contenedor">
+          <table class="tabla">
+            <thead><tr><th>Hora</th><th>Cliente</th><th>Medio</th><th class="derecha">Recibido</th><th class="derecha">Aplicado</th></tr></thead>
+            <tbody id="tabla-abonos"></tbody>
+          </table>
+        </div>
+      </section>
+    </div>
+    <div class="pila">
+      <section class="tarjeta">
+        <h2>Registrar abono</h2>
+        <form id="form-abono">
+          <label for="abono-credito">Deuda a la que se abona</label>
+          <select id="abono-credito"></select>
+          <div class="fila-dos">
+            <div>
+              <label for="abono-monto">Monto recibido (COP)</label>
+              <input id="abono-monto" type="text" inputmode="numeric">
+            </div>
+            <div>
+              <label for="abono-medio">Medio de pago</label>
+              <select id="abono-medio">
+                <option>Efectivo</option><option>Nequi</option><option>Daviplata</option><option>Bre-B</option>
+              </select>
+            </div>
+          </div>
+          <p id="abono-ayuda" class="texto-suave texto-pequeno"></p>
+          <button type="submit" class="boton boton-primario boton-ancho">Registrar abono</button>
+        </form>
+      </section>
+      <section class="tarjeta">
+        <h2>Clientes</h2>
+        <div class="tabla-contenedor">
+          <table class="tabla">
+            <thead><tr><th>Nombre</th><th>Teléfono</th><th class="derecha">Plazo</th><th class="derecha">Saldo</th></tr></thead>
+            <tbody id="tabla-clientes"></tbody>
+          </table>
+        </div>
+      </section>
+      <section class="tarjeta">
+        <h2>Nuevo cliente</h2>
+        <form id="form-cliente">
+          <div class="fila-dos">
+            <div><label for="cli-nombre">Nombre</label><input id="cli-nombre" type="text"></div>
+            <div><label for="cli-telefono">Teléfono</label><input id="cli-telefono" type="text" inputmode="numeric"></div>
+          </div>
+          <label for="cli-plazo">Plazo de crédito (días)</label>
+          <input id="cli-plazo" type="text" inputmode="numeric" value="15">
+          <button type="submit" class="boton boton-secundario boton-ancho">Guardar cliente</button>
+        </form>
+      </section>
+    </div>
+  </div>
+</section>
+
+        <!-- ============ VISTA: EGRESOS (RF-014) ============ -->
+<section id="vista-egresos" class="vista" hidden>
+  <header class="encabezado"><div>
+    <h1>Egresos de caja</h1>
+    <p class="texto-suave">Pagos a proveedores, gastos de urgencia y otros. Solo el efectivo reduce la caja esperada.</p>
+  </div></header>
+  <div class="rejilla-dos">
+    <section class="tarjeta">
+      <h2>Registrar egreso</h2>
+      <form id="form-egreso">
+        <label for="egreso-categoria">Categoría</label>
+        <select id="egreso-categoria">
+          <option value="Pago_proveedor">Pago a proveedor</option>
+          <option value="Gasto_urgencia">Gasto de urgencia</option>
+          <option value="Otros">Otros</option>
+        </select>
+        <div id="egreso-bloque-factura">
+          <label for="egreso-factura">Factura pendiente</label>
+          <select id="egreso-factura"></select>
+        </div>
+        <div id="egreso-bloque-nota" hidden>
+          <label for="egreso-nota">Nota explicativa (obligatoria)</label>
+          <input id="egreso-nota" type="text">
+        </div>
+        <div class="fila-dos">
+          <div>
+            <label for="egreso-monto">Monto (COP)</label>
+            <input id="egreso-monto" type="text" inputmode="numeric" required>
+          </div>
+          <div>
+            <label for="egreso-medio">Medio de pago</label>
+            <select id="egreso-medio">
+              <option>Efectivo</option><option>Nequi</option><option>Daviplata</option><option>Bre-B</option>
+            </select>
+          </div>
+        </div>
+        <p id="egreso-ayuda" class="texto-suave texto-pequeno"></p>
+        <button type="submit" class="boton boton-primario boton-ancho">Registrar egreso</button>
+      </form>
+    </section>
+    <section class="tarjeta">
+      <h2>Egresos de hoy</h2>
+      <div class="tabla-contenedor">
+        <table class="tabla">
+          <thead><tr><th>Hora</th><th>Categoría</th><th>Detalle</th><th>Medio</th><th class="derecha">Monto</th></tr></thead>
+          <tbody id="tabla-egresos"></tbody>
+        </table>
+      </div>
+    </section>
+  </div>
+</section>
+
+<!-- ============ VISTA: CIERRE DE CAJA (RF-015, RF-018) ============ -->
+<section id="vista-caja" class="vista" hidden>
+  <header class="encabezado"><div>
+    <h1>Cierre de caja</h1>
+    <p class="texto-suave">Compara el efectivo esperado con el efectivo contado.</p>
+  </div></header>
+  <div class="rejilla-dos">
+    <div class="pila">
+      <section class="tarjeta">
+        <h2>Efectivo esperado</h2>
+        <table class="tabla"><tbody id="caja-detalle"></tbody></table>
+        <div class="resumen">
+          <span class="resumen-etiqueta">Efectivo esperado en caja</span>
+          <span id="caja-esperado" class="resumen-total">$0</span>
+        </div>
+        <h3>Fuera de la caja física (informativo)</h3>
+        <table class="tabla"><tbody id="caja-digital"></tbody></table>
+      </section>
+      <section class="tarjeta">
+        <h2>Cierres anteriores</h2>
+        <div class="tabla-contenedor">
+          <table class="tabla">
+            <thead><tr><th>Fecha</th><th class="derecha">Esperado</th><th class="derecha">Contado</th><th class="derecha">Diferencia</th><th>Estado</th></tr></thead>
+            <tbody id="caja-historial"></tbody>
+          </table>
+        </div>
+      </section>
+    </div>
+    <section class="tarjeta">
+      <h2>Contar y cerrar</h2>
+      <label for="caja-contado">Efectivo contado (COP)</label>
+      <input id="caja-contado" type="text" inputmode="numeric" placeholder="0">
+      <div class="resumen">
+        <span class="resumen-etiqueta">Diferencia (contado − esperado)</span>
+        <span id="caja-diferencia" class="resumen-total">—</span>
+        <p id="caja-mensaje" class="texto-suave"></p>
+      </div>
+      <div id="caja-bloque-explicacion" hidden>
+        <label for="caja-explicacion">Explicación de la diferencia (obligatoria)</label>
+        <input id="caja-explicacion" type="text">
+      </div>
+      <button id="btn-cerrar-caja" type="button" class="boton boton-primario boton-grande boton-ancho" disabled>Confirmar cierre</button>
+    </section>
+  </div>
+</section>
+        
+
+      </div>
+    </div>
+  </section>
+
+  <div id="aviso" class="aviso"></div>
+
+  <!-- Orden obligatorio: api.js, app.js y después los módulos -->
+  <script src="../js/api.js"></script>
+  <script src="../js/app.js"></script>
+  <script src="../js/compras.js"></script>
+  <script src="../js/inventario.js"></script>
+  <script src="../js/egresos.js"></script>
+  <script src="../js/caja.js"></script>
+  <script src="../js/clientes.js"></script>
+</body>
+</html>

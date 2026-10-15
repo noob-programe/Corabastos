@@ -1,0 +1,314 @@
+/* ==========================================================
+   LEDGERA · Estilos del módulo de ventas
+   Diseño de ESCRITORIO primero (≥ 1100 px).
+   El apilado para pantallas pequeñas queda al final como
+   fase posterior.
+   ========================================================== */
+
+/* ---------- 1. Variables de diseño ---------- */
+:root {
+  --color-fondo: #f1f4f9;
+  --color-superficie: #ffffff;
+  --color-texto: #16213a;
+  --color-texto-suave: #6b7691;
+  --color-primario: #0f766e;
+  --color-primario-claro: #14b8a6;
+  --color-primario-oscuro: #0b5f58;
+  --color-lateral: #0c2a2e;
+  --color-alerta: #b45309;
+  --color-error: #dc2626;
+  --color-borde: #e3e8f2;
+  --color-resalte: #eef2f9;
+  --radio: 14px;
+  --sombra: 0 4px 20px rgba(22, 33, 58, 0.07);
+  --ancho-lateral: 230px;
+  --ancho-ticket: 430px;
+}
+
+/* ---------- 2. Reinicio y base ---------- */
+* { box-sizing: border-box; }
+[hidden] { display: none !important; }
+
+body {
+  margin: 0;
+  background: var(--color-fondo);
+  color: var(--color-texto);
+  font: 15px/1.45 "Segoe UI", system-ui, -apple-system, Roboto, sans-serif;
+}
+
+h1 { margin: 0; font-size: 1.5rem; }
+h2 { margin: 0 0 14px; font-size: 1.1rem; }
+h3 { margin: 18px 0 8px; font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.04em; color: var(--color-texto-suave); }
+
+/* ---------- 3. Textos utilitarios ---------- */
+.texto-suave { color: var(--color-texto-suave); margin: 4px 0; }
+.texto-pequeno { font-size: 0.85rem; }
+.texto-error { color: var(--color-error); font-weight: 600; font-size: 0.9rem; margin: 4px 0; }
+.texto-alerta { color: var(--color-alerta); font-weight: 600; font-size: 0.9rem; margin: 4px 0; }
+.derecha { text-align: right !important; }
+
+/* ---------- 4. Banner de conexión ---------- */
+.banner-conexion {
+  position: sticky; top: 0; z-index: 50;
+  padding: 10px; text-align: center; font-weight: 600;
+  background: #f59e0b; color: #3b2a00;
+}
+
+/* ---------- 5. Tarjetas ---------- */
+.tarjeta {
+  background: var(--color-superficie);
+  border-radius: var(--radio);
+  box-shadow: var(--sombra);
+  padding: 20px;
+  animation: aparecer 0.3s ease;
+}
+.tarjeta-cabecera { display: flex; align-items: center; justify-content: space-between; gap: 16px; margin-bottom: 14px; }
+.tarjeta-cabecera h2 { margin: 0; }
+
+@keyframes aparecer {
+  from { opacity: 0; transform: translateY(8px); }
+  to   { opacity: 1; transform: none; }
+}
+
+/* ---------- 6. Pantallas de acceso (login y apertura) ---------- */
+.pantalla-acceso { min-height: 100vh; display: grid; grid-template-columns: 1.1fr 1fr; }
+
+.acceso-marca {
+  display: flex; flex-direction: column; justify-content: center;
+  padding: 0 64px;
+  background: linear-gradient(145deg, var(--color-lateral), var(--color-primario));
+  color: #fff;
+}
+.acceso-marca h1 { font-size: 3rem; letter-spacing: 0.04em; }
+.acceso-marca p { font-size: 1.15rem; opacity: 0.85; max-width: 380px; }
+
+.acceso-formulario { display: flex; align-items: center; justify-content: center; padding: 24px; }
+.tarjeta-acceso { width: 100%; max-width: 400px; padding: 32px; }
+
+/* ---------- 7. Formularios ---------- */
+label { display: block; margin: 12px 0 4px; font-size: 0.85rem; color: var(--color-texto-suave); }
+
+input, select {
+  width: 100%;
+  min-height: 44px;
+  padding: 0 12px;
+  border: 1.5px solid var(--color-borde);
+  border-radius: 10px;
+  background: #fff;
+  font: inherit;
+  transition: border-color 0.15s, box-shadow 0.15s;
+}
+input:focus, select:focus {
+  outline: none;
+  border-color: var(--color-primario-claro);
+  box-shadow: 0 0 0 3px rgba(20, 184, 166, 0.2);
+}
+
+.fila-dos { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.buscador { max-width: 280px; }
+
+/* ---------- 8. Botones ---------- */
+.boton {
+  min-height: 44px; padding: 0 18px;
+  border: 0; border-radius: 10px;
+  font: inherit; font-weight: 600; cursor: pointer;
+  transition: background 0.15s, transform 0.1s;
+}
+.boton:active { transform: scale(0.98); }
+.boton:disabled { opacity: 0.45; cursor: not-allowed; }
+
+.boton-primario { background: var(--color-primario); color: #fff; }
+.boton-primario:hover:not(:disabled) { background: var(--color-primario-oscuro); }
+.boton-fantasma { background: rgba(255, 255, 255, 0.12); color: #fff; width: 100%; }
+.boton-fantasma:hover { background: rgba(255, 255, 255, 0.22); }
+.boton-ancho { width: 100%; margin-top: 14px; }
+.boton-grande { min-height: 54px; font-size: 1.1rem; }
+
+/* ---------- 9. Layout principal: barra lateral + contenido ---------- */
+.layout { display: flex; min-height: 100vh; }
+
+.lateral {
+  position: sticky; top: 0;
+  width: var(--ancho-lateral); height: 100vh;
+  flex-shrink: 0;
+  display: flex; flex-direction: column;
+  padding: 20px 14px;
+  background: var(--color-lateral);
+  color: #fff;
+}
+.lateral-logo { padding: 4px 10px 24px; font-size: 1.3rem; font-weight: 800; letter-spacing: 0.06em; }
+.lateral-menu { flex: 1; display: flex; flex-direction: column; gap: 4px; }
+
+.menu-item {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 11px 12px; border-radius: 10px;
+  color: rgba(255, 255, 255, 0.75); cursor: pointer;
+}
+.menu-item.activo { background: var(--color-primario); color: #fff; font-weight: 600; }
+.menu-item.deshabilitado { cursor: not-allowed; opacity: 0.55; }
+.menu-item small { font-size: 0.65rem; padding: 2px 6px; border-radius: 99px; background: rgba(255, 255, 255, 0.15); }
+
+.lateral-usuario { padding-top: 14px; border-top: 1px solid rgba(255, 255, 255, 0.15); display: flex; flex-direction: column; gap: 6px; }
+.lateral-usuario small { opacity: 0.6; }
+
+.contenido { flex: 1; min-width: 0; padding: 24px 32px 40px; }
+
+.encabezado { display: flex; align-items: center; justify-content: space-between; margin-bottom: 20px; }
+.insignia { padding: 8px 16px; border-radius: 99px; background: #ccfbf1; color: var(--color-primario-oscuro); font-weight: 700; }
+
+/* ---------- 10. Zona de trabajo: catálogo (izq.) + ticket (der.) ---------- */
+.zona-trabajo { display: grid; grid-template-columns: 1fr var(--ancho-ticket); gap: 24px; align-items: start; }
+.columna-principal { display: flex; flex-direction: column; gap: 24px; min-width: 0; }
+
+.ticket { position: sticky; top: 24px; max-height: calc(100vh - 48px); overflow-y: auto; }
+
+/* ---------- 11. Catálogo ---------- */
+.catalogo { display: grid; grid-template-columns: repeat(auto-fill, minmax(190px, 1fr)); gap: 12px; }
+
+.tarjeta-producto {
+  padding: 14px;
+  border: 1.5px solid var(--color-borde);
+  border-radius: 12px;
+  background: #fff;
+  text-align: left; font: inherit; cursor: pointer;
+  transition: border-color 0.15s, box-shadow 0.15s, transform 0.15s;
+}
+.tarjeta-producto:hover { border-color: var(--color-primario-claro); box-shadow: var(--sombra); transform: translateY(-2px); }
+.tarjeta-producto strong { display: block; margin-bottom: 2px; }
+.tarjeta-producto span { display: block; font-size: 0.88rem; color: var(--color-texto-suave); }
+.tarjeta-producto .precio { margin-top: 6px; font-size: 1rem; font-weight: 700; color: var(--color-primario); }
+.tarjeta-producto.stock-bajo { border-color: #f59e0b; background: #fffbeb; }
+.tarjeta-producto.sin-stock { opacity: 0.5; }
+
+/* ---------- 12. Carrito ---------- */
+.carrito { max-height: 280px; overflow-y: auto; }
+.linea-carrito {
+  display: grid; grid-template-columns: 1fr auto; gap: 6px;
+  padding: 10px 0; border-bottom: 1px solid var(--color-borde);
+}
+.aviso-stock { margin: 2px 0 0; font-size: 0.85rem; }
+.linea-controles { grid-column: 1 / -1; display: flex; gap: 6px; align-items: center; }
+.linea-controles .campo-cantidad { width: 58px; text-align: center; }
+.linea-controles .campo-precio { flex: 1; }
+
+.boton-cantidad {
+  width: 40px; height: 44px;
+  border: 0; border-radius: 10px;
+  background: var(--color-resalte);
+  font-size: 1.2rem; cursor: pointer;
+}
+.boton-cantidad:hover { background: #dde5f2; }
+
+.etiqueta { padding: 2px 8px; border-radius: 99px; background: var(--color-resalte); font-size: 0.75rem; }
+.etiqueta-fiado { background: #fee2e2; color: #991b1b; }
+
+/* ---------- 13. Canal y atajos de pago ---------- */
+.selector-canal { display: flex; gap: 8px; }
+.opcion-canal {
+  flex: 1; min-height: 44px;
+  border: 1.5px solid var(--color-borde); border-radius: 10px;
+  background: #fff; font: inherit; font-weight: 600; cursor: pointer;
+}
+.opcion-canal.activa { background: var(--color-primario); border-color: var(--color-primario); color: #fff; }
+
+.atajos { display: flex; gap: 6px; flex-wrap: wrap; }
+.atajo {
+  min-height: 34px; padding: 0 14px;
+  border: 0; border-radius: 99px;
+  background: var(--color-resalte); font: inherit; cursor: pointer;
+}
+.atajo:hover { background: #dde5f2; }
+
+/* ---------- 14. Resumen ---------- */
+.resumen { margin: 18px 0 4px; padding: 14px; border-radius: 12px; background: #f0fdfa; }
+.resumen-etiqueta { font-size: 0.85rem; color: var(--color-texto-suave); }
+.resumen-total { display: block; font-size: 2rem; font-weight: 800; }
+
+/* ---------- 15. Historial ---------- */
+.tabla-contenedor { overflow-x: auto; }
+.tabla { width: 100%; border-collapse: collapse; }
+.tabla th {
+  padding: 10px 8px; text-align: left;
+  font-size: 0.78rem; text-transform: uppercase; letter-spacing: 0.04em;
+  color: var(--color-texto-suave); border-bottom: 2px solid var(--color-borde);
+}
+.tabla td { padding: 11px 8px; border-bottom: 1px solid var(--color-borde); white-space: nowrap; }
+.tabla tbody tr:hover { background: #f8fafc; }
+
+/* ---------- 16. Aviso emergente ---------- */
+.aviso {
+  position: fixed; right: 28px; bottom: 28px; z-index: 60;
+  padding: 14px 20px; border-radius: 12px;
+  background: var(--color-texto); color: #fff;
+  transform: translateY(90px); opacity: 0;
+  transition: transform 0.3s, opacity 0.3s;
+}
+.aviso.visible { transform: none; opacity: 1; }
+.aviso.error { background: var(--color-error); }
+
+/* ---------- 17. Pantallas pequeñas (fase posterior, solo apilado básico) ---------- */
+@media (max-width: 1100px) {
+  .pantalla-acceso { grid-template-columns: 1fr; }
+  .acceso-marca { display: none; }
+  .layout { flex-direction: column; }
+  .lateral { position: static; width: 100%; height: auto; }
+  .lateral-menu { display: none; }
+  .contenido { padding: 16px; }
+  .zona-trabajo { grid-template-columns: 1fr; }
+  .ticket { position: static; max-height: none; }
+}
+/* ==========================================================
+   BLOQUE 2: navegación entre vistas, módulos nuevos y pulido
+   ========================================================== */
+
+/* ---------- Navegación ---------- */
+.menu-item { user-select: none; transition: background 0.15s, color 0.15s; }
+.menu-item:not(.activo):not(.deshabilitado):hover { background: rgba(255, 255, 255, 0.08); color: #fff; }
+.insignia-lateral { display: block; text-align: center; margin-bottom: 8px; font-size: 0.85rem; }
+.vista { animation: aparecer 0.25s ease; }
+
+/* ---------- Distribución de dos columnas para los módulos nuevos ---------- */
+.rejilla-dos { display: grid; grid-template-columns: 1.5fr 1fr; gap: 24px; align-items: start; }
+.pila { display: flex; flex-direction: column; gap: 24px; min-width: 0; }
+
+.fila-proveedor { display: grid; grid-template-columns: 1fr auto; gap: 12px; align-items: end; }
+.fila-linea { display: grid; grid-template-columns: 2fr 1fr 1fr auto; gap: 10px; align-items: end; margin-bottom: 14px; }
+.subformulario { margin: 14px 0; padding: 14px; border: 1.5px dashed var(--color-borde); border-radius: 12px; background: #f8fafc; }
+.subformulario h3 { margin-top: 0; }
+
+/* ---------- Botones adicionales ---------- */
+.boton-secundario { background: var(--color-resalte); color: var(--color-texto); }
+.boton-secundario:hover:not(:disabled) { background: #dde5f2; }
+.boton-pequeno { min-height: 36px; padding: 0 14px; font-size: 0.9rem; margin-top: 10px; }
+.boton-texto { border: 0; background: none; color: var(--color-primario); font: inherit; font-weight: 600; cursor: pointer; padding: 4px 8px; }
+.boton-texto:hover { text-decoration: underline; }
+
+/* ---------- Etiquetas de estado ---------- */
+.etq { display: inline-block; padding: 3px 10px; border-radius: 99px; font-size: 0.78rem; font-weight: 700; }
+.etq-ok { background: #dcfce7; color: #166534; }
+.etq-alerta { background: #fef3c7; color: #92400e; }
+.etq-error { background: #fee2e2; color: #991b1b; }
+.etq-info { background: #dbeafe; color: #1e40af; }
+.etq-neutro { background: var(--color-resalte); color: var(--color-texto-suave); }
+
+/* ---------- Estado vacío (ticket y tablas) ---------- */
+.vacio {
+  display: flex; flex-direction: column; align-items: center; gap: 4px;
+  padding: 28px 12px; text-align: center;
+  border: 1.5px dashed var(--color-borde); border-radius: 12px;
+  color: var(--color-texto-suave);
+}
+.vacio strong { color: var(--color-texto); }
+.vacio p { margin: 0; font-size: 0.9rem; }
+.vacio-icono { font-size: 2rem; }
+.celda-vacia { text-align: center !important; color: var(--color-texto-suave); padding: 22px 8px !important; }
+
+/* ---------- Celdas editables y cifras ---------- */
+.campo-tabla { width: 120px; min-height: 36px; text-align: right; }
+.celda-precio { display: flex; gap: 6px; align-items: center; }
+.cifra-negativa { color: var(--color-error); font-weight: 700; }
+
+@media (max-width: 1100px) {
+  .rejilla-dos { grid-template-columns: 1fr; }
+  .fila-linea, .fila-proveedor { grid-template-columns: 1fr; }
+}
