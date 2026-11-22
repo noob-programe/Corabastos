@@ -1,0 +1,414 @@
+/* ============ VARIABLES ============ */
+:root {
+  --verde-oscuro: #0F3D2E;
+  --verde-medio: #145A32;
+  --verde-acento: #27AE60;
+  --verde-claro: #E8F5EE;
+  --gris-texto: #1C1C1C;
+  --gris-suave: #6B7280;
+  --fondo: #F5F7F6;
+  --blanco: #FFFFFF;
+  --sombra: 0 8px 24px rgba(15, 61, 46, 0.07);
+  --sombra-hover: 0 16px 36px rgba(15, 61, 46, 0.14);
+  --radio: 18px;
+}
+
+/* ============ RESET ============ */
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+html, body { height: 100%; }
+
+/* ============ FONDO CON IMAGEN ============ */
+body {
+  font-family: 'Inter', sans-serif;
+  color: var(--gris-texto);
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  overflow-x: hidden;
+
+  /* --- OPCIÓN A: imagen de fondo local --- */
+  background:
+    linear-gradient(
+      180deg,
+      rgba(15, 61, 46, 0.55) 0%,
+      rgba(15, 61, 46, 0.75) 100%
+    ),
+    url('assets/fondo-ledgera.jpg') center / cover no-repeat fixed;
+
+  /* --- OPCIÓN B (fallback / sin imagen): gradiente verde oscuro ---
+  background:
+    linear-gradient(
+      180deg,
+      rgba(15, 61, 46, 0.55) 0%,
+      rgba(15, 61, 46, 0.9) 100%
+    ),
+    radial-gradient(
+      ellipse at top,
+      #1a5a45 0%,
+      #0F3D2E 70%
+    );
+  background-attachment: fixed;
+  */
+}
+
+/* ============ BLOBS DECORATIVOS ============ */
+.bg-blob {
+  position: fixed;
+  border-radius: 50%;
+  filter: blur(90px);
+  z-index: 0;
+  pointer-events: none;
+  opacity: 0.35;
+}
+
+.bg-blob--1 {
+  width: 400px; height: 400px;
+  background: rgba(39, 174, 96, 0.4);
+  top: -120px; left: -100px;
+}
+
+.bg-blob--2 {
+  width: 350px; height: 350px;
+  background: rgba(46, 204, 113, 0.25);
+  bottom: -100px; right: -80px;
+}
+
+.bg-blob--3 {
+  width: 280px; height: 280px;
+  background: rgba(39, 174, 96, 0.2);
+  top: 40%; right: 15%;
+}
+
+/* ============ HEADER ============ */
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 18px 40px;
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
+.logo {
+  font-size: 24px;
+  font-weight: 800;
+  color: #FFFFFF;
+  letter-spacing: -0.6px;
+  text-decoration: none;
+}
+
+.logo span { color: var(--verde-acento); }
+
+/* ============ PERFIL + DROPDOWN ============ */
+.perfil-wrapper { position: relative; }
+
+.perfil-btn {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: rgba(255, 255, 255, 0.12);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  padding: 6px 6px 6px 16px;
+  border-radius: 50px;
+  cursor: pointer;
+  transition: 0.25s;
+  font-family: inherit;
+  color: white;
+}
+
+.perfil-btn:hover { background: rgba(255, 255, 255, 0.2); }
+
+.perfil-btn .nombre {
+  font-weight: 600;
+  font-size: 14px;
+  color: #FFFFFF;
+}
+
+.avatar {
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--verde-medio), var(--verde-acento));
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: 14px;
+  border: 2px solid rgba(255, 255, 255, 0.25);
+}
+
+.dropdown {
+  position: absolute;
+  top: 115%;
+  right: 0;
+  background: var(--blanco);
+  border-radius: 14px;
+  box-shadow: var(--sombra-hover);
+  padding: 8px;
+  min-width: 210px;
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(-8px);
+  transition: 0.25s ease;
+  border: 1px solid rgba(15, 61, 46, 0.06);
+}
+
+.dropdown.activo {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0);
+}
+
+.dropdown a {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 11px 14px;
+  color: var(--gris-texto);
+  text-decoration: none;
+  font-size: 14px;
+  font-weight: 500;
+  border-radius: 8px;
+  transition: 0.2s;
+}
+
+.dropdown a:hover {
+  background: var(--verde-claro);
+  color: var(--verde-oscuro);
+}
+
+.dropdown a.cerrar { color: #C0392B; }
+.dropdown a.cerrar:hover { background: #FDEDEC; color: #C0392B; }
+
+.dropdown svg { width: 16px; height: 16px; fill: currentColor; flex-shrink: 0; }
+
+/* ============ MAIN ============ */
+.main {
+  flex: 1;
+  padding: 60px 40px 40px;
+  max-width: 1200px;
+  margin: 0 auto;
+  width: 100%;
+  position: relative;
+  z-index: 1;
+}
+
+.saludo {
+  font-size: clamp(24px, 3vw, 34px);
+  font-weight: 700;
+  color: #FFFFFF;
+  margin-bottom: 60px;
+  text-align: center;
+  letter-spacing: -0.5px;
+  text-shadow: 0 2px 12px rgba(0, 0, 0, 0.35);
+}
+
+.saludo .acento { color: #4ADE80; }
+
+/* ============ CARDS ============ */
+.cards-container {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 24px;
+  margin-bottom: 90px;
+}
+
+.card {
+  box-sizing: border-box;
+  width: 100%;
+  height: 254px;
+  background: rgba(255, 255, 255, 0.85);
+  border: 1px solid rgba(255, 255, 255, 0.9);
+  box-shadow: 12px 17px 51px rgba(0, 0, 0, 0.25);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border-radius: 17px;
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 20px;
+  user-select: none;
+  color: var(--verde-oscuro);
+  position: relative;
+  overflow: hidden;
+}
+
+.card:hover {
+  border: 1px solid var(--verde-oscuro);
+  transform: scale(1.05);
+  box-shadow: 12px 17px 51px rgba(0, 0, 0, 0.4);
+  background: rgba(232, 245, 238, 0.95);
+}
+
+.card:active {
+  transform: scale(0.95) rotateZ(1.7deg);
+}
+
+.card__icono {
+  width: 72px;
+  height: 72px;
+  border-radius: 20px;
+  background: var(--verde-claro);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: 0.4s;
+}
+
+.card__icono svg {
+  width: 36px;
+  height: 36px;
+  fill: var(--verde-oscuro);
+  transition: 0.4s;
+}
+
+.card:hover .card__icono {
+  background: var(--verde-oscuro);
+  transform: scale(1.08);
+}
+
+.card:hover .card__icono svg {
+  fill: white;
+}
+
+.card__texto {
+  font-size: 18px;
+  font-weight: 800;
+  letter-spacing: -0.3px;
+  color: var(--verde-oscuro);
+}
+
+/* ============ BOTÓN CIERRE ============ */
+.cierre-wrapper {
+  display: flex;
+  justify-content: center;
+  margin-top: 20px;
+}
+
+.btn-cierre {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  background: var(--verde-acento);
+  color: white;
+  border: none;
+  padding: 20px 52px;
+  font-size: 17px;
+  font-weight: 700;
+  font-family: inherit;
+  border-radius: 16px;
+  cursor: pointer;
+  transition: 0.3s;
+  box-shadow: 0 10px 24px rgba(39, 174, 96, 0.4);
+  letter-spacing: 0.3px;
+}
+
+.btn-cierre:hover {
+  background: #2ECC71;
+  transform: translateY(-3px);
+  box-shadow: 0 16px 32px rgba(39, 174, 96, 0.55);
+}
+
+.btn-cierre:active { transform: translateY(0); }
+
+.btn-cierre svg {
+  width: 22px;
+  height: 22px;
+  fill: white;
+}
+
+/* ============ FOOTER ============ */
+.footer {
+  background: rgba(0, 0, 0, 0.35);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  color: rgba(255, 255, 255, 0.85);
+  text-align: center;
+  padding: 26px 20px;
+  font-size: 13px;
+  position: relative;
+  z-index: 1;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.footer strong { color: white; font-weight: 600; }
+
+.footer__links {
+  display: flex;
+  justify-content: center;
+  gap: 26px;
+  margin-top: 10px;
+  flex-wrap: wrap;
+}
+
+.footer a {
+  color: rgba(255, 255, 255, 0.85);
+  text-decoration: none;
+  transition: 0.2s;
+}
+
+.footer a:hover { color: var(--verde-acento); }
+
+/* ============ RESPONSIVE ============ */
+@media (max-width: 1024px) {
+  .cards-container {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 640px) {
+  .header { padding: 14px 20px; }
+  .main { padding: 40px 20px 30px; }
+  .logo { font-size: 20px; }
+  .perfil-btn .nombre { display: none; }
+  .perfil-btn { padding: 4px; }
+  .saludo { margin-bottom: 36px; }
+
+  .cards-container {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 14px;
+    margin-bottom: 60px;
+  }
+
+  .card {
+    height: 170px;
+    gap: 14px;
+    border-radius: 14px;
+  }
+
+  .card__icono {
+    width: 54px;
+    height: 54px;
+    border-radius: 16px;
+  }
+
+  .card__icono svg {
+    width: 26px;
+    height: 26px;
+  }
+
+  .card__texto {
+    font-size: 15px;
+  }
+
+  .btn-cierre {
+    width: 100%;
+    justify-content: center;
+    padding: 18px 24px;
+    font-size: 16px;
+  }
+
+  .bg-blob { opacity: 0.25; }
+}

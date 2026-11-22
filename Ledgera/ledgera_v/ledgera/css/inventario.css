@@ -1,0 +1,133 @@
+/* LEDGERA · Inventario — autocontenido, mismo estilo de Ventas */
+:root {
+    --verde-osc: #1a3d1a; --verde: #1a5a1a; --verde-claro: #e8f0e8;
+    --borde: #cfe0cf; --fondo: #f1f6f1; --ambar: #e6c86a; --rojo: #c0392b;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: 'Montserrat', sans-serif; font-size: 16px; color: var(--verde-osc); background: var(--fondo); min-height: 100vh; }
+[hidden] { display: none !important; }
+
+/* ---------- Header y tabs ---------- */
+.app-header {
+    position: sticky; top: 0; z-index: 20; display: flex; align-items: center; justify-content: space-between; gap: 12px;
+    padding: 10px 16px; background: var(--verde-osc); color: #fff;
+}
+.header-title { font-size: 1.15rem; font-weight: 800; }
+.header-user { display: flex; align-items: center; gap: 8px; font-weight: 600; font-size: .9rem; }
+.header-user i { font-size: 1.5rem; }
+.btn-back { width: 44px; height: 44px; border: 0; border-radius: 10px; cursor: pointer; background: rgba(255,255,255,.12); color: #fff; font-size: 1.1rem; }
+.btn-back:hover { background: rgba(255,255,255,.22); }
+.aviso-red { background: var(--rojo); color: #fff; text-align: center; padding: 10px 14px; font-weight: 700; font-size: .95rem; }
+
+.tabs {
+    position: sticky; top: 64px; z-index: 15; display: flex; background: #fff;
+    border-bottom: 3px solid var(--verde-osc); box-shadow: 0 4px 12px rgba(0,30,0,.08);
+}
+.tab {
+    flex: 1; min-height: 56px; border: 0; background: #fff; cursor: pointer;
+    font: 800 .95rem 'Montserrat', sans-serif; color: #4a6a4a;
+    display: flex; align-items: center; justify-content: center; gap: 8px; padding: 0 6px;
+}
+.tab.activo { background: var(--verde-osc); color: #fff; }
+
+.app-main { max-width: 760px; margin: 0 auto; padding: 16px 14px 60px; }
+
+/* ---------- Bloques y formularios ---------- */
+.paso { background: #fff; border-radius: 14px; padding: 18px; margin-bottom: 16px; border-top: 5px solid var(--verde); box-shadow: 0 6px 18px rgba(0,30,0,.08); }
+.paso h2 { display: flex; align-items: center; gap: 10px; font-size: 1.1rem; margin-bottom: 14px; }
+.num { display: inline-flex; align-items: center; justify-content: center; width: 32px; height: 32px; border-radius: 50%; background: var(--verde); color: #fff; font-weight: 800; }
+.titulo-lista { font-size: 1.1rem; margin: 26px 0 12px; }
+
+.etiqueta { display: block; font-weight: 700; font-size: 1rem; margin: 14px 0 6px; }
+.nota { font-size: .95rem; font-weight: 600; color: #4a6a4a; margin-top: 6px; min-height: 1.2em; }
+.campo {
+    width: 100%; height: 52px; padding: 0 14px; border: 2px solid var(--borde); border-radius: 10px; background: #f6faf6;
+    font: 700 1.05rem 'Montserrat', sans-serif; color: var(--verde-osc);
+}
+.campo:focus { outline: none; border-color: var(--verde); }
+select.campo { appearance: auto; }
+
+.chip {
+    min-height: 44px; padding: 0 16px; border: 2px solid var(--borde); border-radius: 22px; background: #f6faf6; cursor: pointer;
+    font: 800 .95rem 'Montserrat', sans-serif; color: var(--verde-osc);
+}
+.chip.activo { background: var(--verde); border-color: var(--verde); color: #fff; }
+
+.btn-sec {
+    width: 100%; min-height: 52px; margin-top: 12px; border: 2px dashed var(--verde); border-radius: 12px; background: #f6faf6; cursor: pointer;
+    font: 800 1rem 'Montserrat', sans-serif; color: var(--verde);
+}
+.btn-cobrar {
+    display: flex; align-items: center; justify-content: center; gap: 10px; width: 100%; min-height: 60px; border: 0; border-radius: 14px; cursor: pointer;
+    background: var(--verde); color: #fff; font: 800 1.1rem 'Montserrat', sans-serif; box-shadow: 0 6px 16px rgba(26,90,26,.3);
+}
+.btn-cobrar:active { transform: translateY(2px); }
+.btn-cobrar:disabled { background: #7a947a; cursor: wait; box-shadow: none; }
+
+.msg { margin: 10px 0; padding: 10px 12px; border-radius: 10px; font-weight: 700; font-size: .95rem; }
+.msg.error { background: #fdecea; color: var(--rojo); border: 2px solid var(--rojo); }
+.msg.aviso { background: #fff8e8; color: #6b5400; border: 2px solid var(--ambar); }
+.msg.ok { background: var(--verde-claro); color: var(--verde); border: 2px solid var(--verde); }
+
+.seg { display: grid; grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); gap: 8px; }
+.seg-op {
+    min-height: 52px; border: 2px solid var(--borde); border-radius: 12px; background: #f6faf6; cursor: pointer;
+    font: 800 .95rem 'Montserrat', sans-serif; color: var(--verde-osc); padding: 4px 8px;
+}
+.seg-op.activo { background: var(--verde-osc); border-color: var(--verde-osc); color: #fff; }
+
+/* ---------- Existencias ---------- */
+.filtros { display: flex; align-items: center; justify-content: space-between; gap: 10px; margin: 12px 0 16px; flex-wrap: wrap; }
+.resumen { font-weight: 700; font-size: .95rem; color: #4a6a4a; }
+
+.card-prod { background: #fff; border-radius: 14px; padding: 14px 16px; margin-bottom: 12px; box-shadow: 0 4px 14px rgba(0,30,0,.07); border-left: 6px solid var(--verde); }
+.card-prod h3 { font-size: 1.1rem; margin-bottom: 8px; }
+.fila-cal { display: grid; grid-template-columns: 1.1fr 1fr 1fr; gap: 6px 10px; align-items: center; padding: 10px 0; border-top: 1px solid #e0ede0; }
+.fila-cal .cal { font-weight: 800; }
+.fila-cal .stock strong { font-size: 1.25rem; }
+.fila-cal small { display: block; font-size: .82rem; font-weight: 600; color: #5a7a5a; }
+.fila-cal .precio { font-weight: 800; color: var(--verde); text-align: right; }
+.fila-cal .acciones { grid-column: 1 / -1; display: flex; gap: 8px; }
+.fila-cal.bajo .stock strong { color: var(--rojo); }
+.fila-cal.agotado .stock strong { color: #999; }
+.etiqueta-estado { display: inline-block; margin-top: 4px; padding: 2px 10px; border-radius: 10px; font-size: .8rem; font-weight: 800; }
+.etiqueta-estado.bajo { background: #fdecea; color: var(--rojo); }
+.etiqueta-estado.agotado { background: #eee; color: #777; }
+.mini { min-height: 44px; padding: 0 14px; border: 2px solid var(--borde); border-radius: 10px; background: #f6faf6; cursor: pointer; font: 700 .9rem 'Montserrat', sans-serif; color: var(--verde-osc); }
+.vacio { padding: 18px 4px; font-weight: 600; color: #6a8a6a; text-align: center; }
+
+/* ---------- Entradas ---------- */
+.linea { background: #f6faf6; border: 2px solid var(--borde); border-radius: 12px; padding: 14px; margin-bottom: 12px; }
+.linea-cab { display: flex; justify-content: space-between; align-items: center; }
+.quitar { width: 44px; height: 44px; border: 0; border-radius: 10px; background: #fdecea; color: var(--rojo); cursor: pointer; font-size: 1rem; }
+.calidad-chips { display: flex; flex-wrap: wrap; gap: 8px; }
+.fila-3 { display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: 0 10px; }
+.subtotal { margin-top: 10px; font-weight: 700; text-align: right; }
+.subtotal strong { color: var(--verde); }
+
+.total-grande { display: flex; justify-content: space-between; align-items: center; gap: 10px; margin-top: 18px; padding: 14px 16px; border-radius: 12px; background: var(--verde-claro); border: 2px solid var(--borde); font-weight: 700; }
+.total-grande strong { font-size: 1.7rem; font-weight: 800; color: var(--verde); }
+
+.item { background: #fff; border-radius: 12px; padding: 14px 16px; margin-bottom: 10px; box-shadow: 0 4px 14px rgba(0,30,0,.07); }
+.item-cab { display: flex; justify-content: space-between; align-items: flex-start; gap: 10px; }
+.item strong { font-size: 1.02rem; }
+.item .fecha { font-size: .85rem; font-weight: 600; color: #5a7a5a; }
+.item .detalle { margin-top: 6px; font-size: .95rem; font-weight: 600; color: #3a5a3a; }
+.item .motivo { margin-top: 4px; font-size: .95rem; font-style: italic; color: #4a6a4a; }
+.badge { display: inline-block; padding: 3px 12px; border-radius: 12px; font-size: .82rem; font-weight: 800; white-space: nowrap; }
+.badge.Pendiente { background: #fff8e8; color: #8a6a00; border: 1px solid var(--ambar); }
+.badge.Parcial { background: #e8f0fb; color: #1f4f8a; border: 1px solid #9bb8e0; }
+.badge.Pagado { background: var(--verde-claro); color: var(--verde); border: 1px solid var(--verde); }
+.badge.Merma { background: #fdecea; color: var(--rojo); }
+.badge.Devolucion { background: var(--verde-claro); color: var(--verde); }
+.badge.Correccion_conteo { background: #fff8e8; color: #8a6a00; }
+
+/* ---------- Modal ---------- */
+.modal { position: fixed; inset: 0; z-index: 50; display: flex; align-items: center; justify-content: center; padding: 16px; background: rgba(0,30,0,.55); }
+.modal-caja { width: 100%; max-width: 420px; background: #fff; border-radius: 16px; padding: 22px; }
+.modal-caja h3 { font-size: 1.15rem; margin-bottom: 4px; }
+.modal-caja .campo { margin-top: 12px; }
+.modal-acciones { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 16px; }
+.modal-acciones .btn-sec { margin-top: 0; border-style: solid; }
+
+.calidad-chips { margin-top: 8px; }

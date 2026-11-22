@@ -1,0 +1,30 @@
+/* Complementa styles.css (mismo look del login) */
+.campo { position: relative; width: 100%; max-width: 280px; }
+.campo .input { max-width: none; padding-right: 50px; }
+
+.ver {
+    position: absolute; top: 0; bottom: 0; right: 4px;
+    width: 44px; background: none; border: 0; cursor: pointer;
+    color: var(--font-color-sub); font-size: 16px;
+}
+.ver:hover { color: var(--main-color); }
+
+.aviso {
+    width: 100%; max-width: 280px; text-align: center;
+    background: #fff8e1; border: 2px solid #c9a227; border-radius: 6px;
+    padding: 8px 12px; font-size: 12px; font-weight: 700; color: #6b5400;
+}
+
+.reglas { list-style: none; width: 100%; max-width: 280px; font-size: 12px; font-weight: 600; color: var(--font-color-sub); }
+.reglas li { display: flex; align-items: center; gap: 8px; margin: 4px 0; }
+.reglas li i { width: 14px; text-align: center; }
+.reglas li.ok { color: #1a5a1a; }
+
+.button-confirm.ancho { width: 200px; }
+
+.link-sec {
+    background: none; border: none; min-height: 44px;
+    color: var(--font-color-sub); font-weight: 700; font-size: 13px;
+    text-decoration: underline; cursor: pointer; font-family: 'Montserrat', sans-serif;
+}
+.link-sec:hover { color: var(--main-color); }

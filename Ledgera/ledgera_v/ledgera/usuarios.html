@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LEDEGERA - Usuarios</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="css/usuarios.css">
+</head>
+<body>
+
+    <!-- HEADER (mismo patrón del dashboard) -->
+    <header class="app-header">
+        <button class="btn-back" id="btnBack" title="Volver al dashboard">
+            <i class="fas fa-arrow-left"></i>
+        </button>
+
+        <h1 class="header-title">Usuarios</h1>
+
+        <div class="header-user">
+            <span id="headerUserName">Admin</span>
+            <i class="fas fa-user-circle"></i>
+        </div>
+    </header>
+
+    <!-- CONTENIDO -->
+    <main class="app-main">
+
+        <!-- Barra superior: título de sección + botón Crear -->
+        <div class="section-bar">
+            <h2 class="section-title">Listado de usuarios</h2>
+            <button class="btn-create" id="btnCreate">
+                <i class="fas fa-plus"></i> Crear
+            </button>
+        </div>
+
+        <!-- Tabla -->
+        <div class="table-wrapper">
+            <table class="data-table">
+                <thead>
+                    <tr>
+                        <th>Usuario</th>
+                        <th>Nombre</th>
+                        <th>Cédula</th>
+                        <th>Puesto</th>
+                        <th>Rol</th>
+                        <th class="col-actions"></th>
+                    </tr>
+                </thead>
+                <tbody id="usersTableBody">
+                    <!-- Filas generadas por JS -->
+                </tbody>
+            </table>
+
+            <div class="empty-state" id="emptyState" style="display:none;">
+                <i class="fas fa-users"></i>
+                <p>No hay usuarios registrados todavía.</p>
+            </div>
+        </div>
+
+    </main>
+
+    <!-- ==================== MODAL: CREAR USUARIO ==================== -->
+    <div class="modal-overlay" id="createModal">
+        <div class="modal-box">
+            <div class="modal-header">
+                <h3>Crear nuevo usuario</h3>
+                <button class="modal-close" data-close="createModal">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+
+            <form class="modal-form" id="createUserForm">
+                <div class="form-row">
+                    <label for="newUsuario">Usuario *</label>
+                    <input type="text" id="newUsuario" placeholder="ej: jperez" required />
+                </div>
+
+                <div class="form-row">
+                    <label for="newNombre">Nombre completo *</label>
+                    <input type="text" id="newNombre" placeholder="ej: Juan Pérez" required />
+                </div>
+
+                <div class="form-row">
+                    <label for="newCedula">Cédula *</label>
+                    <input type="text" id="newCedula" placeholder="ej: 1020304050" required />
+                </div>
+
+                <div class="form-row" id="rowNewPuesto">
+                    <label for="newPuesto">Puesto *</label>
+                    <select id="newPuesto" required></select>
+                </div>
+
+                <div class="form-row">
+                    <label for="newRol">Rol *</label>
+                    <select id="newRol" required>
+                        <option value="Vendedor">Vendedor</option>
+                        <option value="Dueno">Dueño</option>
+                        <option value="Administrador">Administrador</option>
+                    </select>
+                </div>
+
+                <small class="hint">El sistema genera una clave temporal y te la muestra una sola vez. El usuario deberá cambiarla al primer ingreso.</small>
+
+                <div class="message-container">
+                    <span class="error-message" id="createError"></span>
+                    <span class="success-message" id="createSuccess"></span>
+                </div>
+
+                <div class="modal-actions">
+                    <button type="button" class="btn-secondary" data-close="createModal">Cancelar</button>
+                    <button type="submit" class="btn-primary">Guardar usuario</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- ==================== MODAL: EDITAR USUARIO ==================== -->
+    <div class="modal-overlay" id="editModal">
+        <div class="modal-box">
+            <div class="modal-header">
+                <h3>Editar usuario</h3>
+                <button class="modal-close" data-close="editModal">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+
+            <form class="modal-form" id="editUserForm">
+                <input type="hidden" id="editId" />
+
+                <div class="form-row">
+                    <label for="editUsuario">Usuario *</label>
+                    <input type="text" id="editUsuario" required />
+                </div>
+
+                <div class="form-row">
+                    <label for="editNombre">Nombre completo *</label>
+                    <input type="text" id="editNombre" required />
+                </div>
+
+                <div class="form-row">
+                    <label for="editCedula">Cédula *</label>
+                    <input type="text" id="editCedula" required />
+                </div>
+
+                <div class="form-row" id="rowEditPuesto">
+                    <label for="editPuesto">Puesto *</label>
+                    <select id="editPuesto"></select>
+                </div>
+
+                <div class="message-container">
+                    <span class="error-message" id="editError"></span>
+                    <span class="success-message" id="editSuccess"></span>
+                </div>
+
+                <div class="modal-actions">
+                    <button type="button" class="btn-secondary" data-close="editModal">Cancelar</button>
+                    <button type="submit" class="btn-primary">Guardar cambios</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- ==================== MODAL: CLAVE TEMPORAL ==================== -->
+    <div class="modal-overlay" id="claveModal">
+        <div class="modal-box">
+            <div class="modal-header">
+                <h3>Clave temporal</h3>
+                <button class="modal-close" data-close="claveModal"><i class="fas fa-times"></i></button>
+            </div>
+            <div class="modal-form">
+                <p>Entrégasela al usuario. <strong>Solo se muestra esta vez.</strong></p>
+                <div class="form-row">
+                    <input type="text" id="claveGenerada" readonly style="font-size:1.4rem;text-align:center;letter-spacing:2px;" />
+                </div>
+                <div class="modal-actions">
+                    <button type="button" class="btn-secondary" id="btnCopiarClave">Copiar</button>
+                    <button type="button" class="btn-primary" data-close="claveModal">Listo</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="js/usuarios.js"></script>
+</body>
+</html>

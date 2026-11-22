@@ -1,0 +1,200 @@
+/* LEDGERA · Ventas — autocontenido (no depende de usuarios.css) */
+:root {
+    --verde-osc: #1a3d1a;
+    --verde: #1a5a1a;
+    --verde-claro: #e8f0e8;
+    --borde: #cfe0cf;
+    --fondo: #f1f6f1;
+    --ambar: #e6c86a;
+    --rojo: #c0392b;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 16px;                 /* RNF-002: base de 16 px */
+    color: var(--verde-osc);
+    background: var(--fondo);
+    min-height: 100vh;
+}
+
+/* ---------- Header ---------- */
+.app-header {
+    position: sticky; top: 0; z-index: 20;
+    display: flex; align-items: center; justify-content: space-between; gap: 12px;
+    padding: 10px 16px;
+    background: var(--verde-osc); color: #fff;
+}
+.header-title { font-size: 1.15rem; font-weight: 800; }
+.header-user { display: flex; align-items: center; gap: 8px; font-weight: 600; font-size: .9rem; }
+.header-user i { font-size: 1.5rem; }
+.btn-back {
+    width: 44px; height: 44px; border: 0; border-radius: 10px; cursor: pointer;
+    background: rgba(255,255,255,.12); color: #fff; font-size: 1.1rem;
+}
+.btn-back:hover { background: rgba(255,255,255,.22); }
+
+.aviso-red {
+    background: var(--rojo); color: #fff; text-align: center;
+    padding: 10px 14px; font-weight: 700; font-size: .95rem;
+}
+
+/* ---------- Contenedor ---------- */
+.app-main { max-width: 720px; margin: 0 auto; padding: 16px 14px 190px; }
+
+.paso {
+    background: #fff; border-radius: 14px; padding: 18px;
+    margin-bottom: 16px; border-top: 5px solid var(--verde);
+    box-shadow: 0 6px 18px rgba(0, 30, 0, .08);
+}
+.paso h2 { display: flex; align-items: center; gap: 10px; font-size: 1.1rem; margin-bottom: 14px; }
+.num {
+    display: inline-flex; align-items: center; justify-content: center;
+    width: 32px; height: 32px; border-radius: 50%;
+    background: var(--verde); color: #fff; font-weight: 800; font-size: 1rem;
+}
+
+.etiqueta { display: block; font-weight: 700; font-size: 1rem; margin: 14px 0 6px; }
+.sub { font-weight: 600; margin: 14px 0 8px; }
+.nota { font-size: 1rem; font-weight: 600; color: #4a6a4a; margin-top: 8px; min-height: 1.2em; }
+.nota.aviso { color: #8a6a00; }
+.nota.bloqueo { color: var(--rojo); font-weight: 800; }
+
+.campo {
+    width: 100%; height: 52px; padding: 0 14px;
+    border: 2px solid var(--borde); border-radius: 10px; background: #f6faf6;
+    font: 700 1.05rem 'Montserrat', sans-serif; color: var(--verde-osc);
+}
+.campo:focus, .cantidad-control input:focus { outline: none; border-color: var(--verde); }
+
+/* ---------- Fichas de producto ---------- */
+.fichas { display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 10px; margin-top: 12px; }
+.ficha {
+    min-height: 64px; padding: 10px; border: 2px solid var(--borde); border-radius: 12px;
+    background: #f6faf6; cursor: pointer; text-align: center;
+    font: 800 1rem 'Montserrat', sans-serif; color: var(--verde-osc);
+}
+.ficha small { display: block; font-weight: 600; font-size: .85rem; color: #4a6a4a; margin-top: 2px; }
+.ficha.activo { background: var(--verde); border-color: var(--verde); color: #fff; }
+.ficha.activo small { color: #d7ead7; }
+.ficha.agotado { opacity: .5; }
+
+/* ---------- Calidades ---------- */
+.calidades { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 10px; }
+.calidad {
+    min-height: 76px; padding: 10px; border: 2px solid var(--borde); border-radius: 12px;
+    background: #fff; cursor: pointer; text-align: left; font-family: 'Montserrat', sans-serif; color: var(--verde-osc);
+}
+.calidad strong { display: block; font-size: 1.05rem; }
+.calidad span { display: block; font-size: .9rem; font-weight: 600; color: #4a6a4a; }
+.calidad .precio { font-weight: 800; color: var(--verde); }
+.calidad.activo { border-color: var(--verde); background: var(--verde-claro); box-shadow: 0 0 0 3px rgba(26,90,26,.25); }
+.calidad.bajo span.stock { color: var(--rojo); font-weight: 800; }
+.calidad:disabled { background: #eee; color: #999; cursor: not-allowed; border-style: dashed; }
+.calidad:disabled span, .calidad:disabled .precio { color: #999; }
+
+/* ---------- Cantidad ---------- */
+.cantidad-control {
+    display: flex; border: 2px solid var(--borde); border-radius: 12px; overflow: hidden; background: #f6faf6;
+}
+.cantidad-control input {
+    flex: 1; min-width: 0; border: 0; background: transparent; text-align: center;
+    font: 800 1.5rem 'Montserrat', sans-serif; color: var(--verde-osc); -moz-appearance: textfield;
+}
+.cantidad-control input::-webkit-outer-spin-button,
+.cantidad-control input::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
+.btn-qty {
+    width: 64px; height: 60px; border: 0; cursor: pointer;
+    background: var(--verde-claro); color: var(--verde); font-size: 1.2rem;
+}
+.btn-qty:active { background: #c9dcc9; }
+
+.total-grande {
+    display: flex; justify-content: space-between; align-items: center;
+    margin-top: 18px; padding: 14px 16px; border-radius: 12px;
+    background: var(--verde-claro); border: 2px solid var(--borde); font-weight: 700;
+}
+.total-grande strong { font-size: 1.9rem; font-weight: 800; color: var(--verde); }
+
+/* ---------- Pagos ---------- */
+.pagos { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; }
+.pago {
+    min-height: 60px; border: 2px solid var(--borde); border-radius: 12px; background: #f6faf6;
+    font: 800 1rem 'Montserrat', sans-serif; color: var(--verde-osc); cursor: pointer;
+    display: flex; align-items: center; justify-content: center; gap: 8px;
+}
+.pago.activo { background: var(--verde); border-color: var(--verde); color: #fff; }
+
+.bloque-extra { margin-top: 16px; padding: 14px; border-radius: 12px; background: #f6faf6; border: 2px solid var(--borde); }
+.bloque-extra.fiado { background: #fff8e8; border-color: var(--ambar); }
+.sub-titulo { font-size: 1rem; color: #8a6a00; margin-bottom: 4px; }
+
+.lista-clientes { margin-top: 8px; }
+.cliente-op {
+    width: 100%; min-height: 56px; margin-bottom: 8px; padding: 10px 14px; text-align: left;
+    border: 2px solid var(--borde); border-radius: 10px; background: #fff; cursor: pointer;
+    font-family: 'Montserrat', sans-serif; color: var(--verde-osc);
+}
+.cliente-op strong { display: block; }
+.cliente-op span { font-size: .9rem; font-weight: 600; color: #4a6a4a; }
+.cliente-op .debe { color: var(--rojo); font-weight: 800; }
+.vacio { padding: 8px 2px; font-weight: 600; color: #6a8a6a; }
+
+.cliente-elegido {
+    display: flex; justify-content: space-between; align-items: center; gap: 10px;
+    padding: 12px 14px; border-radius: 10px; background: #fff; border: 2px solid var(--verde);
+}
+.cliente-elegido strong { display: block; }
+.cliente-elegido span { font-size: .9rem; font-weight: 600; color: #4a6a4a; }
+
+.check { display: flex; gap: 10px; align-items: flex-start; margin-top: 14px; font-weight: 600; font-size: .95rem; }
+.check input { width: 26px; height: 26px; flex-shrink: 0; accent-color: var(--verde); }
+
+.canal { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.canal-op {
+    min-height: 52px; border: 2px solid var(--borde); border-radius: 12px; background: #f6faf6;
+    font: 800 1rem 'Montserrat', sans-serif; color: var(--verde-osc); cursor: pointer;
+}
+.canal-op.activo { background: var(--verde-osc); border-color: var(--verde-osc); color: #fff; }
+
+.link-sec {
+    background: none; border: 0; min-height: 44px; margin-top: 6px; padding: 0 4px;
+    font: 700 .95rem 'Montserrat', sans-serif; color: var(--verde); text-decoration: underline; cursor: pointer;
+}
+
+/* ---------- Barra fija de cobro ---------- */
+.barra-cobro {
+    position: fixed; left: 0; right: 0; bottom: 0; z-index: 30;
+    padding: 10px 14px calc(10px + env(safe-area-inset-bottom, 0px));
+    background: #fff; border-top: 3px solid var(--verde-osc);
+    box-shadow: 0 -6px 18px rgba(0, 30, 0, .12);
+}
+.barra-cobro > * { max-width: 720px; margin-left: auto; margin-right: auto; }
+.btn-cobrar {
+    display: flex; align-items: center; justify-content: center; gap: 10px;
+    width: 100%; min-height: 60px; border: 0; border-radius: 14px; cursor: pointer;
+    background: var(--verde); color: #fff; font: 800 1.15rem 'Montserrat', sans-serif;
+    box-shadow: 0 6px 16px rgba(26, 90, 26, .3);
+}
+.btn-cobrar:active { transform: translateY(2px); }
+.btn-cobrar:disabled { background: #7a947a; cursor: wait; box-shadow: none; }
+
+.msg { margin-bottom: 8px; padding: 10px 12px; border-radius: 10px; font-weight: 700; font-size: .95rem; }
+.msg.error { background: #fdecea; color: var(--rojo); border: 2px solid var(--rojo); }
+.msg.aviso { background: #fff8e8; color: #6b5400; border: 2px solid var(--ambar); }
+
+/* ---------- Éxito ---------- */
+.exito { text-align: center; background: #fff; border-radius: 14px; padding: 28px 18px; box-shadow: 0 6px 18px rgba(0,30,0,.08); }
+.exito-icono i { font-size: 72px; color: var(--verde); }
+.exito h2 { margin: 10px 0 18px; font-size: 1.5rem; }
+.exito-detalle { text-align: left; background: var(--verde-claro); border-radius: 12px; padding: 14px 16px; margin-bottom: 16px; }
+.exito-detalle .fila { display: flex; justify-content: space-between; gap: 10px; padding: 6px 0; font-weight: 600; }
+.exito-detalle .fila.total { font-size: 1.3rem; font-weight: 800; color: var(--verde); border-top: 2px dashed var(--borde); margin-top: 6px; padding-top: 10px; }
+.exito .btn-cobrar { margin-bottom: 6px; }
+
+[hidden] { display: none !important; }
+
+@media (min-width: 700px) {
+    .pagos { grid-template-columns: repeat(3, 1fr); }
+}

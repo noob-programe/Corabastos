@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LEDGERA - Ventas</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/ventas.css?v=1">
+</head>
+<body>
+
+    <header class="app-header">
+        <button class="btn-back" id="btnBack" title="Volver al inicio" aria-label="Volver al inicio">
+            <i class="fas fa-arrow-left"></i>
+        </button>
+        <h1 class="header-title">Ventas</h1>
+        <div class="header-user">
+            <span id="headerUserName"></span>
+            <i class="fas fa-user-circle"></i>
+        </div>
+    </header>
+
+    <div class="aviso-red" id="avisoRed" hidden>
+        <i class="fas fa-wifi"></i> Sin conexión. No se puede registrar hasta que vuelva el internet.
+    </div>
+
+    <main class="app-main">
+
+        <!-- ================= PANTALLA DE VENTA ================= -->
+        <section id="pantallaVenta">
+
+            <!-- PASO 1 -->
+            <article class="paso">
+                <h2><span class="num">1</span> Producto y calidad</h2>
+
+                <input type="search" id="buscarProducto" class="campo" placeholder="Buscar producto" aria-label="Buscar producto" autocomplete="off">
+                <div class="fichas" id="listaProductos"></div>
+
+                <div id="bloqueCalidades" hidden>
+                    <p class="sub">Calidad de <strong id="nombreProducto"></strong></p>
+                    <div class="calidades" id="listaCalidades"></div>
+                </div>
+            </article>
+
+            <!-- PASO 2 -->
+            <article class="paso">
+                <h2><span class="num">2</span> Cantidad y precio</h2>
+
+                <label class="etiqueta" for="cantidad">Cantidad</label>
+                <div class="cantidad-control">
+                    <button type="button" class="btn-qty" id="btnMenos" aria-label="Menos"><i class="fas fa-minus"></i></button>
+                    <input type="number" id="cantidad" value="1" min="1" inputmode="numeric">
+                    <button type="button" class="btn-qty" id="btnMas" aria-label="Más"><i class="fas fa-plus"></i></button>
+                </div>
+                <p class="nota" id="notaStock"></p>
+
+                <label class="etiqueta" for="precio">Precio por unidad (puedes cambiarlo si negocian)</label>
+                <input type="number" id="precio" class="campo" min="0" step="100" inputmode="numeric" placeholder="0">
+
+                <div class="total-grande">
+                    <span>Total</span>
+                    <strong id="totalVenta">$0</strong>
+                </div>
+            </article>
+
+            <!-- PASO 3 -->
+            <article class="paso">
+                <h2><span class="num">3</span> Forma de pago</h2>
+
+                <div class="pagos" id="listaPagos">
+                    <button type="button" class="pago" data-pago="Efectivo"><i class="fas fa-money-bill-wave"></i> Efectivo</button>
+                    <button type="button" class="pago" data-pago="Nequi"><i class="fas fa-mobile-screen"></i> Nequi</button>
+                    <button type="button" class="pago" data-pago="Daviplata"><i class="fas fa-mobile-screen"></i> Daviplata</button>
+                    <button type="button" class="pago" data-pago="Bre-B"><i class="fas fa-mobile-screen"></i> Bre-B</button>
+                    <button type="button" class="pago" data-pago="Fiado"><i class="fas fa-handshake"></i> Fiado</button>
+                    <button type="button" class="pago" data-pago="Mixto"><i class="fas fa-shuffle"></i> Mixto</button>
+                </div>
+
+                <!-- Mixto -->
+                <div class="bloque-extra" id="bloqueMixto" hidden>
+                    <label class="etiqueta" for="montoEfectivo">¿Cuánto paga en efectivo?</label>
+                    <input type="number" id="montoEfectivo" class="campo" min="0" step="100" inputmode="numeric" placeholder="0">
+                    <p class="nota">Queda en fiado: <strong id="restoFiado">$0</strong></p>
+                </div>
+
+                <!-- Cliente (fiado y mixto) -->
+                <div class="bloque-extra fiado" id="bloqueCliente" hidden>
+                    <h3 class="sub-titulo"><i class="fas fa-user"></i> Cliente del fiado</h3>
+
+                    <div class="cliente-elegido" id="clienteElegido" hidden>
+                        <div>
+                            <strong id="clienteNombre"></strong>
+                            <span id="clienteDetalle"></span>
+                        </div>
+                        <button type="button" class="link-sec" id="btnCambiarCliente">Cambiar</button>
+                    </div>
+
+                    <div id="clienteBuscar">
+                        <label class="etiqueta" for="buscarCliente">Buscar por nombre o teléfono</label>
+                        <input type="search" id="buscarCliente" class="campo" autocomplete="off" placeholder="Escribe al menos 2 letras">
+                        <div class="lista-clientes" id="resultadosCliente"></div>
+                        <button type="button" class="link-sec" id="btnNuevoCliente">No está en la lista: crear cliente nuevo</button>
+                    </div>
+
+                    <div id="clienteNuevo" hidden>
+                        <label class="etiqueta" for="nuevoNombre">Nombre completo</label>
+                        <input type="text" id="nuevoNombre" class="campo" autocomplete="off">
+                        <label class="etiqueta" for="nuevoTelefono">Teléfono</label>
+                        <input type="tel" id="nuevoTelefono" class="campo" inputmode="numeric" autocomplete="off">
+                        <label class="check">
+                            <input type="checkbox" id="nuevoConsentimiento">
+                            <span>El cliente autoriza guardar sus datos (Ley 1581 de 2012).</span>
+                        </label>
+                        <button type="button" class="link-sec" id="btnCancelarNuevo">Cancelar y buscar en la lista</button>
+                    </div>
+
+                    <p class="nota" id="notaVencimiento"></p>
+                </div>
+
+                <!-- Canal -->
+                <p class="etiqueta">Canal de venta</p>
+                <div class="canal" id="listaCanal">
+                    <button type="button" class="canal-op activo" data-canal="Mostrador">Mostrador</button>
+                    <button type="button" class="canal-op" data-canal="Domicilio">Domicilio</button>
+                </div>
+            </article>
+        </section>
+
+        <!-- ================= PANTALLA DE ÉXITO ================= -->
+        <section id="pantallaExito" class="exito" hidden>
+            <div class="exito-icono"><i class="fas fa-circle-check"></i></div>
+            <h2>¡Venta registrada!</h2>
+            <div class="exito-detalle" id="exitoDetalle"></div>
+            <p class="msg aviso" id="exitoAdvertencia" hidden></p>
+            <button type="button" class="btn-cobrar" id="btnNuevaVenta"><i class="fas fa-plus"></i> Nueva venta</button>
+            <button type="button" class="link-sec" id="btnInicio">Volver al inicio</button>
+        </section>
+    </main>
+
+    <!-- Barra fija de cobro -->
+    <div class="barra-cobro" id="barraCobro">
+        <p class="msg error" id="msgForm" role="alert" hidden></p>
+        <button type="button" class="btn-cobrar" id="btnRegistrar">Registrar venta</button>
+    </div>
+
+    <script src="js/ventas.js?v=1"></script>
+</body>
+</html>

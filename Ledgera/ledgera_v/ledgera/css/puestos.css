@@ -1,0 +1,30 @@
+/* Hereda todos los estilos de usuarios */
+@import url('usuarios.css');
+
+/* ==================== SELECT (para cambiar dueño) ==================== */
+.select {
+    width: 100%;
+    padding: 11px 14px;
+    border: 2px solid #cfe0cf;
+    border-radius: 9px;
+    font-size: 0.9rem;
+    font-family: 'Montserrat', sans-serif;
+    color: #1a3d1a;
+    background: #f6faf6;
+    cursor: pointer;
+    transition: border-color 0.2s;
+    appearance: none;
+    background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%231a3d1a' stroke-width='3'><path d='M6 9l6 6 6-6'/></svg>");
+    background-repeat: no-repeat;
+    background-position: right 14px center;
+}
+
+.select:focus {
+    outline: none;
+    border-color: #1a5a1a;
+}
+
+/* Columna estado con badge centrado */
+.data-table tbody td:nth-child(4) {
+    text-align: left;
+}

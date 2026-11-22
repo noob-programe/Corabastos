@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LEDGERA - Inventario</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/inventario.css?v=1">
+</head>
+<body>
+
+    <header class="app-header">
+        <button class="btn-back" id="btnBack" title="Volver al inicio" aria-label="Volver al inicio">
+            <i class="fas fa-arrow-left"></i>
+        </button>
+        <h1 class="header-title">Inventario</h1>
+        <div class="header-user">
+            <span id="headerUserName"></span>
+            <i class="fas fa-user-circle"></i>
+        </div>
+    </header>
+
+    <div class="aviso-red" id="avisoRed" hidden>
+        <i class="fas fa-wifi"></i> Sin conexión. No se puede registrar hasta que vuelva el internet.
+    </div>
+
+    <nav class="tabs" id="tabs">
+        <button class="tab activo" data-tab="existencias"><i class="fas fa-boxes-stacked"></i> Existencias</button>
+        <button class="tab" data-tab="entradas"><i class="fas fa-truck-ramp-box"></i> Entradas</button>
+        <button class="tab" data-tab="ajustes"><i class="fas fa-sliders"></i> Ajustes</button>
+    </nav>
+
+    <main class="app-main">
+        <p class="msg error" id="msgGlobal" role="alert" hidden></p>
+
+        <!-- ================= EXISTENCIAS ================= -->
+        <section id="tab-existencias">
+            <input type="search" id="buscarProducto" class="campo" placeholder="Buscar producto" aria-label="Buscar producto" autocomplete="off">
+            <div class="filtros">
+                <button type="button" class="chip" id="btnSoloBajo"><i class="fas fa-triangle-exclamation"></i> Solo poco stock</button>
+                <span class="resumen" id="resumenStock"></span>
+            </div>
+            <div id="listaExistencias"></div>
+        </section>
+
+        <!-- ================= ENTRADAS ================= -->
+        <section id="tab-entradas" hidden>
+            <article class="paso">
+                <h2><span class="num">1</span> Proveedor y factura</h2>
+
+                <label class="etiqueta" for="selProveedor">Proveedor</label>
+                <select id="selProveedor" class="campo"></select>
+
+                <div id="proveedorNuevo" hidden>
+                    <label class="etiqueta" for="provNombre">Nombre del proveedor</label>
+                    <input type="text" id="provNombre" class="campo" autocomplete="off">
+                    <label class="etiqueta" for="provTelefono">Teléfono (opcional)</label>
+                    <input type="tel" id="provTelefono" class="campo" inputmode="numeric" autocomplete="off">
+                </div>
+
+                <label class="etiqueta" for="documento">Número de factura</label>
+                <input type="text" id="documento" class="campo" autocomplete="off" placeholder="El que trae la factura física">
+            </article>
+
+            <article class="paso">
+                <h2><span class="num">2</span> Mercancía recibida</h2>
+                <div id="lineas"></div>
+                <button type="button" class="btn-sec" id="btnAgregarLinea"><i class="fas fa-plus"></i> Agregar otro producto</button>
+
+                <div class="total-grande">
+                    <span>Total a pagar al proveedor</span>
+                    <strong id="totalFactura">$0</strong>
+                </div>
+            </article>
+
+            <p class="msg" id="msgEntrada" role="alert" hidden></p>
+            <button type="button" class="btn-cobrar" id="btnEntrada"><i class="fas fa-check"></i> Registrar entrada</button>
+
+            <h2 class="titulo-lista">Entradas recientes</h2>
+            <div id="listaEntradas"></div>
+        </section>
+
+        <!-- ================= AJUSTES ================= -->
+        <section id="tab-ajustes" hidden>
+            <article class="paso">
+                <h2><i class="fas fa-sliders"></i> Nuevo ajuste</h2>
+
+                <p class="etiqueta">Tipo de ajuste</p>
+                <div class="seg" id="tipoAjuste">
+                    <button type="button" class="seg-op activo" data-tipo="Merma">Merma</button>
+                    <button type="button" class="seg-op" data-tipo="Devolucion">Devolución</button>
+                    <button type="button" class="seg-op" data-tipo="Correccion_conteo" data-solo="Dueno">Corrección de conteo</button>
+                </div>
+                <p class="nota" id="notaTipo"></p>
+
+                <label class="etiqueta" for="selAjuste">Producto y calidad</label>
+                <select id="selAjuste" class="campo"></select>
+
+                <label class="etiqueta" for="ajusteCantidad" id="lblAjusteCantidad">Unidades perdidas</label>
+                <input type="number" id="ajusteCantidad" class="campo" min="0" inputmode="numeric">
+
+                <label class="etiqueta" for="ajusteMotivo">Motivo (obligatorio)</label>
+                <input type="text" id="ajusteMotivo" class="campo" maxlength="255" autocomplete="off" placeholder="Ej: se pudrió por la lluvia">
+
+                <p class="msg" id="msgAjuste" role="alert" hidden></p>
+                <button type="button" class="btn-cobrar" id="btnAjuste"><i class="fas fa-check"></i> Registrar ajuste</button>
+            </article>
+
+            <h2 class="titulo-lista">Ajustes recientes</h2>
+            <div id="listaAjustes"></div>
+        </section>
+    </main>
+
+    <datalist id="dlProductos"></datalist>
+
+    <!-- Modal: editar mínimo o precio (solo Dueño) -->
+    <div class="modal" id="modalEditar" hidden>
+        <div class="modal-caja">
+            <h3 id="modalTitulo"></h3>
+            <p class="nota" id="modalSub"></p>
+            <input type="number" id="modalValor" class="campo" min="0" inputmode="numeric">
+            <p class="msg error" id="modalMsg" hidden></p>
+            <div class="modal-acciones">
+                <button type="button" class="btn-sec" id="modalCancelar">Cancelar</button>
+                <button type="button" class="btn-cobrar" id="modalGuardar">Guardar</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="js/inventario.js?v=1"></script>
+</body>
+</html>
